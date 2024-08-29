@@ -2,16 +2,17 @@ import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const tasks = sqliteTable('tasks', {
-  id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+  id: integer('id').primaryKey({ autoIncrement: true }),
   title: text('title').notNull(),
   description: text('description').notNull(),
+  dueDate: text('due_date').notNull(),
   isCompleted: integer('is_completed', { mode: 'boolean' }).notNull().default(false),
-  createdAt: integer('created_at', { mode: 'timestamp' })
+  createdAt: text('created_at')
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' })
+  updatedAt: text('updated_at')
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
 export type Task = typeof tasks.$inferSelect;
