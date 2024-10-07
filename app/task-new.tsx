@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 
-export default function Index() {
+export default function AddNewTask() {
   return (
     <View
       style={{
