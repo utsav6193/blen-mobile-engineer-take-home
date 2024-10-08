@@ -15,5 +15,5 @@ export const tasks = sqliteTable('tasks', {
     .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
-export type Task = typeof tasks.$inferSelect;
+export type SelectTask = typeof tasks.$inferSelect;
 export type NewTask = typeof tasks.$inferInsert;

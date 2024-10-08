@@ -2,10 +2,10 @@ import { router } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
-export default function AddTask(props: any) {
+export default function AddNewTask(props: any) {
   const { onPress, title = 'Add Task' } = props;
   return (
-      <Pressable style={styles.button} onPress={ () => {router.push('/task-new')}}>
+      <Pressable style={styles.button} onPress={ () => {router.push('/task-edit')}}>
         <Text style={styles.text}>{title}</Text>
       </Pressable>
   );

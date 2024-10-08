@@ -1,4 +1,4 @@
-import AddTask from '@/components/add-task-button';
+import AddNewTask from '@/components/add-task-button';
 import AppProviders from '@/providers/app-providers';
 import { Stack } from 'expo-router';
 
@@ -19,10 +19,8 @@ function RootNavigation() {
         headerTitleStyle: { fontWeight: 'bold' },
         headerTitleAlign: 'center'
       }}>
-      <Stack.Screen name="index" options={{ headerTitle: 'My Tasks', headerShown: true, headerRight: AddTask}} />
-      <Stack.Screen name="task-new" options={{ presentation: 'modal', headerTitle: 'Add New Task', headerShown: true }} />
-      <Stack.Screen name="task-detail" options={{ headerTitle: 'Task Details', headerShown: true }} />
-      <Stack.Screen name="task-edit" options={{ headerTitle: 'Edit Task', headerShown: true }} />
+      <Stack.Screen name="index" options={{ headerTitle: 'My Tasks', headerShown: true, headerRight: AddNewTask}} />
+      <Stack.Screen name="task-edit" options={{ headerTitle: 'Add New Task', headerShown: true}} />
     </Stack> 
   );  
 }
