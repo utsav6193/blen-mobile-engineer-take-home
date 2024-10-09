@@ -50,20 +50,34 @@ export const useTasks = () => useTaskStore((state) => state.tasks)
 export const useTaskActions = () => useTaskStore((state) => state.actions)
 
 type EditTaskStore = {
-	task: { title: string | undefined; description: string | undefined }
+	task: { title: string | undefined; description: string | undefined, dueDate: string | undefined }
 	actions: {
 		onChangeTitle: (title: string) => void
 		onChangeDescription: (description: string) => void
+		saveTask: (id: string | undefined) => void
 		deleteTask: (id: Number) => void
 	}
 }
 
 const useEditTaskStore = create<EditTaskStore>((set, get) => ({
-	task: { title: undefined, description: undefined },
+	task: { title: undefined, description: undefined, dueDate: undefined },
 	actions: {
 		onChangeTitle: (title) =>
 			set((state) => ({ task: { ...state.task, title } })),
 		onChangeDescription: (description) => set((state) => ({ task: { ...state.task, description } })),
+		saveTask: (id) => {
+			const { title, description, dueDate } = get().task
+			if (!title && !description) return
+			db.insert(tasks)
+				.values({ id: Number(id), title, description, dueDate: new Date().toLocaleString("en-US") })
+				.onConflictDoUpdate({
+					target: tasks.id,
+					set: { title, description, updatedAt: new Date().toLocaleString("en-US") },
+				})
+				.run()
+			set({ task: { title: undefined, description: undefined, dueDate: undefined } })
+			useTaskStore.getState().actions.refetch()
+		},
 		deleteTask: (id) => {
 			db.delete(tasks)
 				.where(eq(tasks.id, Number(id)))

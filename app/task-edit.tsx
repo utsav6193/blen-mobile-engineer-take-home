@@ -2,20 +2,26 @@ import { useEditTask, useEditTaskActions, useTasks } from "@/hooks/tasks-query"
 import { Stack, useLocalSearchParams, useRouter } from "expo-router"
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 
+// Route : EditTask
+// EditTask retrieves the id from the previous page and fetches the task using that id.
+// Using the retrieved task, the title and description are listed.
+// The user can edit the title and deswcription.
+// Save and Delete options are provided for the user to update and delete the task respectively.
+
 export default function EditTask() {
 	const router = useRouter()
 	const tasks = useTasks()
-	const task = tasks.find((task) => task.id === Number(id))
-
   const { id } = useLocalSearchParams<{ id: string }>()
-	const { title, description } = useEditTask()
-	const { onChangeTitle, onChangeDescription, deleteTask } = useEditTaskActions()
+  const { title, description } = useEditTask()
+	const task = tasks.find((task) => task.id === Number(id))
+	const { onChangeTitle, onChangeDescription, saveTask, deleteTask } = useEditTaskActions()
   
   const isEditing = id !== undefined
 
+	// Navigation Bar Left Bar Button Item (Conditional)
   const DeleteButton = (
 		<View>
-			<Pressable
+			<Pressable style={styles.button}
 				onPress={() => {
 					id && deleteTask(Number(id))
 				router.back()
@@ -26,10 +32,12 @@ export default function EditTask() {
 		</View>
 	)
 
+	// Navigation Bar Right Bar Button Item
 	const SaveButton = (
 		<View>
-			<Pressable
+			<Pressable style={styles.button}
 				onPress={() => {
+          saveTask(id)
 					router.back()
 				}}
 			>
@@ -42,7 +50,7 @@ export default function EditTask() {
 		<View>
 			<Stack.Screen
 				options={{
-					title: id ? "Edit task" : "New task",
+					title: id ? "Edit task" : "Add New task",
 					headerLeft: () => isEditing && DeleteButton,
 					headerRight: () => SaveButton,
 				}}
@@ -51,19 +59,20 @@ export default function EditTask() {
 				defaultValue={task?.title ?? ""}
 				value={title}
 				onChangeText={onChangeTitle}
-				placeholder="Title"
+				placeholder="Enter Title here"
 			/>
 			<TextInput style={styles.description}
 				multiline
 				defaultValue={task?.description ?? ""}
 				value={description}
 				onChangeText={onChangeDescription}
-				placeholder="Description"
+				placeholder="Enter Description here"
 			/>
 		</View>
 	)
 }
 
+// StyleSheet for the task-edit page.
 const styles = StyleSheet.create({
   title: {
     padding: 20,
@@ -79,5 +88,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
+  },
+  button: {
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
 });

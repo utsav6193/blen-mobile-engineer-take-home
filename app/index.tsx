@@ -1,6 +1,11 @@
 import { useSearchText, useTaskActions, useTasks } from "@/hooks/tasks-query"
 import { Link } from "expo-router"
-import { FlatList, Pressable, Text } from "react-native"
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native"
+
+// Route : Index (Home Page)
+// Index route retrieves the list of tasks from the database and displays it using FlatList.
+// Clicking on a list item will route to the task-edit page with pre-filled editable  title and description.
+// Clicking on "Add Task" will route to the task-edit page with option to add new task.
 
 export default function Index() {
 	const tasks = useTasks()
@@ -10,16 +15,19 @@ export default function Index() {
 	const filteredTasks = tasks.filter(
 		(task) =>
 			task.title?.toLowerCase().includes(searchText.toLowerCase()) ||
-			task.description?.toLowerCase().includes(searchText.toLowerCase()),
+			task.description?.toLowerCase().includes(searchText.toLowerCase())
 	)
 
 	return (
-		<FlatList
+		<FlatList style={styles.flatlist}
 			data={filteredTasks}
 			refreshing={false}
 			onRefresh={refetch}
 			keyExtractor={(task) => String(task.id)}
 			contentInsetAdjustmentBehavior="automatic"
+			ItemSeparatorComponent = {() => (
+				<View style={styles.separator}/>
+			)}
 			renderItem={({ item: task }) => (
 				<Link
 					asChild
@@ -35,7 +43,20 @@ export default function Index() {
 					</Pressable>
 				</Link>
 			)}
-			contentContainerStyle={{ gap: 8, padding: 8 }}
 		/>
 	)
 }
+
+// StyleSheet for the Index Page
+const styles = StyleSheet.create({
+  flatlist: {
+    padding: 20,
+    fontSize: 20
+  },
+	separator: {
+		backgroundColor: 'gray',
+		height: 2,
+		marginTop: 10,
+		marginBottom: 10
+	}
+});

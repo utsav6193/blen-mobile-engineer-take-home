@@ -14,13 +14,13 @@ function RootNavigation() {
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: '#10101E' },
-        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: '#00008B' },
+        headerTintColor: '#FFFFFF',
         headerTitleStyle: { fontWeight: 'bold' },
         headerTitleAlign: 'center'
       }}>
       <Stack.Screen name="index" options={{ headerTitle: 'My Tasks', headerShown: true, headerRight: AddNewTask}} />
-      <Stack.Screen name="task-edit" options={{ headerTitle: 'Add New Task', headerShown: true}} />
+      <Stack.Screen name="task-edit" options={{headerShown: true}} />
     </Stack> 
   );  
 }
