@@ -55,8 +55,9 @@ type EditTaskStore = {
 		onChangeTitle: (title: string) => void
 		onChangeDescription: (description: string) => void
 		onChangeDueDate: (dueDate: string) => void
-		saveTask: (id: string | undefined) => void
+		saveTask: (id: Number) => void
 		deleteTask: (id: Number) => void
+		updateTask : (id: Number, title: string, description: string, dueDate: string) => void
 	}
 }
 
@@ -83,6 +84,14 @@ const useEditTaskStore = create<EditTaskStore>((set, get) => ({
 			db.delete(tasks)
 				.where(eq(tasks.id, Number(id)))
 				.run()
+			useTaskStore.getState().actions.refetch()
+		},
+		updateTask: (id, title, description, dueDate) => {
+			db.update(tasks)
+				 .set({ title: title, description: description, dueDate: dueDate })
+				.where(eq(tasks.id, Number(id)))
+				.run()
+				set({ task: { title: undefined, description: undefined, dueDate: undefined } })
 			useTaskStore.getState().actions.refetch()
 		},
 	},

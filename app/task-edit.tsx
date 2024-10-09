@@ -14,7 +14,7 @@ export default function EditTask() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { title, description, dueDate } = useEditTask()
 	const task = tasks.find((task) => task.id === Number(id))
-	const { onChangeTitle, onChangeDescription, onChangeDueDate, saveTask, deleteTask } = useEditTaskActions()
+	const { onChangeTitle, onChangeDescription, onChangeDueDate, saveTask, deleteTask, updateTask } = useEditTaskActions()
   
   const isEditing = id !== undefined
 
@@ -37,11 +37,25 @@ export default function EditTask() {
 		<View>
 			<Pressable style={styles.button}
 				onPress={() => {
-          saveTask(id)
+          saveTask(Number(id))
 					router.back()
 				}}
 			>
 				<Text style={styles.text}>Save</Text>
+			</Pressable>
+		</View>
+	)
+
+	// Navigation Bar Right Bar Button Item
+	const UpdateButton = (
+		<View>
+			<Pressable style={styles.button}
+				onPress={() => {
+          updateTask(Number(id), title, description, dueDate)
+					router.back()
+				}}
+			>
+				<Text style={styles.text}>Update</Text>
 			</Pressable>
 		</View>
 	)
@@ -52,7 +66,7 @@ export default function EditTask() {
 				options={{
 					title: id ? "Edit task" : "Add New task",
 					headerLeft: () => isEditing && DeleteButton,
-					headerRight: () => SaveButton,
+					headerRight: () => isEditing? UpdateButton : SaveButton,
 				}}
 			/>
 			<TextInput style={styles.title}
