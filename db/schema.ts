@@ -16,4 +16,3 @@ export const tasks = sqliteTable('tasks', {
 });
 
 export type SelectTask = typeof tasks.$inferSelect;
-export type NewTask = typeof tasks.$inferInsert;

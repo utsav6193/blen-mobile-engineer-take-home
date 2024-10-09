@@ -54,6 +54,7 @@ type EditTaskStore = {
 	actions: {
 		onChangeTitle: (title: string) => void
 		onChangeDescription: (description: string) => void
+		onChangeDueDate: (dueDate: string) => void
 		saveTask: (id: string | undefined) => void
 		deleteTask: (id: Number) => void
 	}
@@ -62,17 +63,17 @@ type EditTaskStore = {
 const useEditTaskStore = create<EditTaskStore>((set, get) => ({
 	task: { title: undefined, description: undefined, dueDate: undefined },
 	actions: {
-		onChangeTitle: (title) =>
-			set((state) => ({ task: { ...state.task, title } })),
+		onChangeTitle: (title) => set((state) => ({ task: { ...state.task, title } })),
 		onChangeDescription: (description) => set((state) => ({ task: { ...state.task, description } })),
+		onChangeDueDate: (dueDate) => set((state) => ({ task: { ...state.task, dueDate } })),
 		saveTask: (id) => {
 			const { title, description, dueDate } = get().task
 			if (!title && !description) return
 			db.insert(tasks)
-				.values({ id: Number(id), title, description, dueDate: new Date().toLocaleString("en-US") })
+				.values({ id: Number(id), title, description, dueDate, createdAt: new Date().toLocaleString("en-US"), updatedAt: new Date().toLocaleString("en-US") })
 				.onConflictDoUpdate({
 					target: tasks.id,
-					set: { title, description, updatedAt: new Date().toLocaleString("en-US") },
+					set: { title, description, dueDate, updatedAt: new Date().toLocaleString("en-US") },
 				})
 				.run()
 			set({ task: { title: undefined, description: undefined, dueDate: undefined } })
@@ -88,5 +89,4 @@ const useEditTaskStore = create<EditTaskStore>((set, get) => ({
 }))
 
 export const useEditTask = () => useEditTaskStore((state) => state.task)
-export const useEditTaskActions = () =>
-	useEditTaskStore((state) => state.actions)
+export const useEditTaskActions = () => useEditTaskStore((state) => state.actions)

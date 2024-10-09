@@ -1,4 +1,4 @@
-import { useSearchText, useTaskActions, useTasks } from "@/hooks/tasks-query"
+import { useTaskActions, useTasks } from "@/hooks/tasks-query"
 import { Link } from "expo-router"
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native"
 
@@ -9,18 +9,11 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native"
 
 export default function Index() {
 	const tasks = useTasks()
-	const searchText = useSearchText()
 	const { refetch } = useTaskActions()
-
-	const filteredTasks = tasks.filter(
-		(task) =>
-			task.title?.toLowerCase().includes(searchText.toLowerCase()) ||
-			task.description?.toLowerCase().includes(searchText.toLowerCase())
-	)
 
 	return (
 		<FlatList style={styles.flatlist}
-			data={filteredTasks}
+			data={tasks}
 			refreshing={false}
 			onRefresh={refetch}
 			keyExtractor={(task) => String(task.id)}
@@ -40,6 +33,8 @@ export default function Index() {
 						<Text>Title: {task.title}</Text>
 						<Text>Description: {task.description}</Text>
 						<Text>Due Date: {task.dueDate} </Text>
+						<Text>Created Date: {task.createdAt} </Text>
+						<Text>Updated Date: {task.updatedAt} </Text>
 					</Pressable>
 				</Link>
 			)}

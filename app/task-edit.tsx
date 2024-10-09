@@ -12,9 +12,9 @@ export default function EditTask() {
 	const router = useRouter()
 	const tasks = useTasks()
   const { id } = useLocalSearchParams<{ id: string }>()
-  const { title, description } = useEditTask()
+  const { title, description, dueDate } = useEditTask()
 	const task = tasks.find((task) => task.id === Number(id))
-	const { onChangeTitle, onChangeDescription, saveTask, deleteTask } = useEditTaskActions()
+	const { onChangeTitle, onChangeDescription, onChangeDueDate, saveTask, deleteTask } = useEditTaskActions()
   
   const isEditing = id !== undefined
 
@@ -59,14 +59,21 @@ export default function EditTask() {
 				defaultValue={task?.title ?? ""}
 				value={title}
 				onChangeText={onChangeTitle}
-				placeholder="Enter Title here"
+				placeholder="Enter Task title here"
 			/>
 			<TextInput style={styles.description}
 				multiline
 				defaultValue={task?.description ?? ""}
 				value={description}
 				onChangeText={onChangeDescription}
-				placeholder="Enter Description here"
+				placeholder="Enter Task description here"
+			/>
+			<TextInput style={styles.description}
+				multiline
+				defaultValue={task?.dueDate ?? ""}
+				value={dueDate}
+				onChangeText={onChangeDueDate}
+				placeholder="Enter Task Due Date here"
 			/>
 		</View>
 	)
@@ -79,7 +86,8 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   description: {
-    padding: 20,
+    paddingLeft: 20,
+		paddingTop: 15,
     fontSize: 16
   },
   text: {

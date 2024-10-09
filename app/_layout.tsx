@@ -10,6 +10,7 @@ export default function RootLayout() {
   );
 }
 
+// Routes for the Entire application
 function RootNavigation() {
   return (
     <Stack
