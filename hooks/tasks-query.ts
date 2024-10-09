@@ -87,6 +87,7 @@ const useEditTaskStore = create<EditTaskStore>((set, get) => ({
 			useTaskStore.getState().actions.refetch()
 		},
 		updateTask: (id, title, description, dueDate) => {
+			if (!title && !description && !dueDate) return
 			db.update(tasks)
 				 .set({ title: title, description: description, dueDate: dueDate })
 				.where(eq(tasks.id, Number(id)))
